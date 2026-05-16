@@ -5,9 +5,10 @@ import {
   Alert,
 } from "react-native";
 
+import "../global.css";
+
 import AddNote from "../components/AddNote";
 import NotesList from "../components/NotesList";
-import { styles } from "../styles/style";
 
 type Note = {
   id: string;
@@ -42,8 +43,11 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Notes App</Text>
+    <View className="flex-1 bg-[#f5f7fb] pt-16 px-5">
+      
+      <Text className="text-3xl font-extrabold text-gray-900 mb-5">
+        Notes App
+      </Text>
 
       <AddNote
         note={note}

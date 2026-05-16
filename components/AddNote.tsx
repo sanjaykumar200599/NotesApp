@@ -6,8 +6,6 @@ import {
   Text,
 } from "react-native";
 
-import { styles } from "../styles/style";
-
 type AddNoteProps = {
   note: string;
   setNote: (text: string) => void;
@@ -20,9 +18,9 @@ export default function AddNote({
   addNote,
 }: AddNoteProps) {
   return (
-    <View style={styles.inputContainer}>
+    <View className="flex-row items-center mb-4">
       <TextInput
-        style={styles.input}
+        className="flex-1 bg-white px-4 py-3 rounded-2xl border border-gray-300 text-base mr-3"
         placeholder="Enter your note..."
         placeholderTextColor="#888"
         value={note}
@@ -30,10 +28,12 @@ export default function AddNote({
       />
 
       <TouchableOpacity
-        style={styles.addButton}
+        className="bg-green-500 px-5 py-3 rounded-2xl"
         onPress={addNote}
       >
-        <Text style={styles.addButtonText}>Add</Text>
+        <Text className="text-white font-bold">
+          Add
+        </Text>
       </TouchableOpacity>
     </View>
   );

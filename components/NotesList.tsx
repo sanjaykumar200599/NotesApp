@@ -2,7 +2,6 @@ import React from "react";
 import { FlatList, Text } from "react-native";
 
 import NoteItem from "./DeleteNote";
-import { styles } from "../styles/style";
 
 type Note = {
   id: string;
@@ -24,7 +23,7 @@ export default function NotesList({
       keyExtractor={(item) => item.id}
       showsVerticalScrollIndicator={false}
       ListEmptyComponent={
-        <Text style={styles.emptyText}>
+        <Text className="text-center mt-14 text-base text-gray-500 font-medium">
           No notes added yet
         </Text>
       }
