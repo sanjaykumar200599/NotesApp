@@ -1,64 +1,83 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  Alert,
+  FlatList,
+  TouchableOpacity,
 } from "react-native";
 
-import "../global.css";
+import { router, useFocusEffect } from "expo-router";
 
-import AddNote from "../components/AddNote";
-import NotesList from "../components/NotesList";
+import { Note } from "../types/note";
+import {
+  getNotes,
+  saveNotes,
+} from "../storage/noteStorage";
 
-type Note = {
-  id: string;
-  text: string;
-};
+import NoteCard from "../components/NoteCard";
+import Header from "../components/Header";
 
 export default function HomeScreen() {
-  const [note, setNote] = useState<string>("");
   const [notes, setNotes] = useState<Note[]>([]);
 
-  const addNote = () => {
-    if (note.trim() === "") {
-      Alert.alert("Empty Note", "Please enter a note");
-      return;
-    }
-
-    const newNote: Note = {
-      id: Date.now().toString(),
-      text: note,
-    };
-
-    setNotes([...notes, newNote]);
-    setNote("");
+  const loadNotes = async () => {
+    const storedNotes = await getNotes();
+    setNotes(storedNotes);
   };
 
-  const deleteNote = (id: string) => {
-    const updatedNotes = notes.filter(
-      (item) => item.id !== id
+  useEffect(() => {
+    loadNotes();
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      loadNotes();
+    }, [])
+  );
+
+  const deleteNote = async (id: string) => {
+    const filteredNotes = notes.filter(
+      (note) => note.id !== id
     );
 
-    setNotes(updatedNotes);
+    setNotes(filteredNotes);
+    await saveNotes(filteredNotes);
   };
 
   return (
     <View className="flex-1 bg-[#f5f7fb] pt-16 px-5">
-      
-      <Text className="text-3xl font-extrabold text-gray-900 mb-5">
-        Notes App
-      </Text>
+      <View className="mb-6">
+        <Header
+          title="SnapNote"
+          subtitle="Capture Thoughts Instantly"
+        />
+      </View>
 
-      <AddNote
-        note={note}
-        setNote={setNote}
-        addNote={addNote}
+      <FlatList
+        data={notes}
+        keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <NoteCard
+            note={item}
+            onDelete={deleteNote}
+          />
+        )}
+        ListEmptyComponent={
+          <Text className="text-center mt-24 text-gray-500 text-base">
+            No notes added yet
+          </Text>
+        }
       />
 
-      <NotesList
-        notes={notes}
-        deleteNote={deleteNote}
-      />
+      <TouchableOpacity
+        className="absolute bottom-8 right-6 w-14 h-14 rounded-full bg-[#10abb3] items-center justify-center"
+        onPress={() => router.push("/create-note")}
+      >
+        <Text className="text-white text-3xl leading-8 font-bold">
+          +
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
