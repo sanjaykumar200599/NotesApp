@@ -110,6 +110,7 @@ export default function CreateNoteScreen() {
 
       <TextInput
         placeholder="Title"
+        placeholderTextColor="#6b7280"
         value={title}
         onChangeText={setTitle}
         className="bg-white p-4 rounded-2xl mb-4"
@@ -117,6 +118,7 @@ export default function CreateNoteScreen() {
 
       <TextInput
         placeholder="Content"
+        placeholderTextColor="#6b7280"
         value={content}
         onChangeText={setContent}
         multiline
